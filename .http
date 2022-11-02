@@ -1,0 +1,13 @@
+GET http://localhost:500/api/movies
+
+###
+
+GET http://localhost:500/api/movies/2
+
+###
+
+GET http://localhost:500/api/users
+
+###
+
+GET http://localhost:500/api/users/3
