@@ -66,13 +66,14 @@ const setMovie = (req, res) => {
       "INSERT INTO movies(title , director , year , color, duration) VALUES (?,?,?,?,?)",
       [title, director, year, color, duration]
     )
-    .then(([err]) => {})
+    .then(([result]) => {
+      res.location(`api/movies/id=${result.insertId}`).sendStatus(201);
+    })
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error saving the movie");
     });
   //console.log(req.body);
-  res.sendStatus(201);
 };
 module.exports = {
   getMovies,

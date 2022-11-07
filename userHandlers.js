@@ -36,13 +36,13 @@ const setUser = (req, res) => {
       "INSERT INTO users(firstname , lastname, email , city , language) VALUES (?,?,?,?,?)",
       [firstname, lastname, email, city, language]
     )
-    .then(([err]) => {})
+    .then(([err]) => {
+      res.location(`api/users/id=${result.insertId}`).sendStatus(201);
+    })
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error saving user");
     });
-
-  res.sendStatus(201);
 };
 module.exports = {
   getUsers,
