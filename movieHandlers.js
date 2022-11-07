@@ -58,7 +58,24 @@ const getMovieById = (req, res) => {
     });
 };
 
+const setMovie = (req, res) => {
+  const { title, director, year, color, duration } = req.body;
+
+  database
+    .query(
+      "INSERT INTO movies(title , director , year , color, duration) VALUES (?,?,?,?,?)",
+      [title, director, year, color, duration]
+    )
+    .then(([err]) => {})
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving the movie");
+    });
+  //console.log(req.body);
+  res.sendStatus(201);
+};
 module.exports = {
   getMovies,
   getMovieById,
+  setMovie,
 };
