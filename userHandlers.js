@@ -1,8 +1,28 @@
 const database = require("./database");
 
 const getUsers = (req, res) => {
+  let sql = "select * from users";
+  const sqlValue = [];
+  const sqlParams = [];
+  let parametre = Object.keys(req.query).length;
+
+  if (parametre > 0) {
+    sql += " where";
+  }
+
+  for (const elt in req.query) {
+    sqlParams.push(` ${elt} = ? `);
+    sqlValue.push(req.query[elt]);
+  }
+  for (let i = 0; i < sqlParams.length; i++) {
+    if (i % 2 != 0) {
+      sql += "and ";
+    }
+    sql += sqlParams[i];
+  }
+
   database
-    .query("select * from users")
+    .query(sql, sqlValue)
     .then(([users]) => {
       res.status(200).json(users);
     })

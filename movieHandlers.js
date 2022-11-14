@@ -1,3 +1,4 @@
+const { query } = require("./database");
 const database = require("./database");
 
 const movies = [
@@ -28,8 +29,33 @@ const movies = [
 ];
 
 const getMovies = (req, res) => {
+  let sql = "select * from movies";
+  const sqlValue = [];
+  const sqlParams = [];
+  let parametre = Object.keys(req.query).length;
+
+  if (parametre > 0) {
+    sql += " where ";
+  }
+
+  for (const elt in req.query) {
+    if (elt == "max_duration") {
+      sqlParams.push("duration <= ?");
+      sqlValue.push(req.query[elt]);
+    } else {
+      sqlParams.push(` ${elt} = ? `);
+      sqlValue.push(req.query[elt]);
+    }
+  }
+  for (let i = 0; i < sqlParams.length; i++) {
+    if (i % 2 != 0) {
+      sql += "and ";
+    }
+    sql += sqlParams[i];
+  }
+
   database
-    .query("select * from movies")
+    .query(sql, sqlValue)
     .then(([movies]) => {
       res.json(movies);
     })
