@@ -6,8 +6,51 @@ GET http://localhost:500/api/movies/2
 
 ###
 
-GET http://localhost:500/api/users
+GET http://localhost:5000/api/users
 
 ###
 
 GET http://localhost:500/api/users/3
+
+###
+
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{
+  "email": "dwight@theoffice.com",
+  "password": "123456"
+}
+###
+GET http://localhost:5000/api/login/5
+
+###
+POST http://localhost:5000/api/users
+Content-Type: application/json
+
+{
+    "firstname" : "valentin",
+    "lastname" : "marlois",
+    "email": "val@mar.fr",
+    "password": "tototata"
+}
+###
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{
+    "email": "val@mar.fr",
+    "password": "tototata"
+}
+###
+POST http://localhost:5000/api/movies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsImlhdCI6MTY2MDIwMjczMywiZXhwIjoxNjYwMjA2MzMzfQ._5PYuoPoBfDtzq6fMsUn_8YGhfqtt_OaBVMHhe-FHlU
+Content-type: application/json
+
+{
+  "title": "Citizen Kane",
+  "director": "Orson Wells",
+  "year": "1941",
+  "color": "0",
+  "duration": 120
+}

@@ -111,10 +111,32 @@ const deleteUser = (req, res) => {
       res.status(500).Send("Error deleting the user");
     });
 };
+
+
+
+
+const getUserByEmailWithPasswordAndPassToNext = (req, res , next) => {  
+  const {email} = req.body;
+
+    database.query("select * from users where email = ?" , [email])
+    .then(([user]) => {
+      if(user[0] != null){
+        req.user = user[0]
+        next()
+      }else{
+        res.sendStatus(401)
+      }
+    }).catch((err) => {
+      console.error(err)
+      res.status(500).send("Error retrieving data from databases")
+    })
+}
+
 module.exports = {
   getUsers,
   getUserId,
   setUser,
   updateUser,
   deleteUser,
+  getUserByEmailWithPasswordAndPassToNext
 };
