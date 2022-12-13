@@ -12,6 +12,8 @@ const userHandlers = require("./userHandlers");
 
 const { validateMovie, validateUser } = require("./validator");
 
+const { hashPassword } = require("./auth.js");
+
 app.use(express.json());
 
 const welcome = (req, res) => {
@@ -28,8 +30,8 @@ app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUserId);
-app.post("/api/users", validateUser, userHandlers.setUser);
-app.put("/api/users/:id", validateUser, userHandlers.updateUser);
+app.post("/api/users", hashPassword, validateUser, userHandlers.setUser);
+app.put("/api/users/:id", hashPassword, validateUser, userHandlers.updateUser);
 app.delete("/api/users/:id", userHandlers.deleteUser);
 
 app.listen(port, (err) => {

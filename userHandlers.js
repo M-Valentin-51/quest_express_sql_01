@@ -1,7 +1,8 @@
 const database = require("./database");
 
 const getUsers = (req, res) => {
-  let sql = "select * from users";
+  let sql =
+    "select id, firstname , lastname , email, city , language from users";
   const sqlValue = [];
   const sqlParams = [];
   let parametre = Object.keys(req.query).length;
@@ -35,7 +36,10 @@ const getUserId = (req, res) => {
   const id = req.params.id;
 
   database
-    .query("select * from users where id = ?", [id])
+    .query(
+      "select id, firstname , lastname , email, city , language from users where id = ?",
+      [id]
+    )
     .then(([user]) => {
       if (user.length) {
         res.status(200).json(user);
@@ -49,14 +53,16 @@ const getUserId = (req, res) => {
 };
 
 const setUser = (req, res) => {
-  const { firstname, lastname, email, city, language } = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } =
+    req.body;
+  console.log(`setUser() hashedPassword : ${hashedPassword}`);
 
   database
     .query(
-      "INSERT INTO users(firstname , lastname, email , city , language) VALUES (?,?,?,?,?)",
-      [firstname, lastname, email, city, language]
+      "INSERT INTO users(firstname , lastname, email , city , language , hashedPassword) VALUES (?,?,?,?,?,?)",
+      [firstname, lastname, email, city, language, hashedPassword]
     )
-    .then(([err]) => {
+    .then(([result]) => {
       res.location(`api/users/id=${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -67,12 +73,13 @@ const setUser = (req, res) => {
 
 const updateUser = (req, res) => {
   const id = req.params.id;
-  const { firstname, lastname, email, city, language } = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } =
+    req.body;
 
   database
     .query(
-      "update users set firstname = ? , lastname = ? , email = ? , city = ? , language = ? where id = ?",
-      [firstname, lastname, email, city, language, id]
+      "update users set firstname = ? , lastname = ? , email = ? , city = ? , language = ? , hashedPassword = ? where id = ?",
+      [firstname, lastname, email, city, language, hashedPassword, id]
     )
     .then(([result]) => {
       if (result.affectedRows === 0) {
